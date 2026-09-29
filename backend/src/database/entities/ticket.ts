@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose'
+import mongoose, { Schema, Document } from 'mongoose'
 
 //Aca estamos definiendo los estados 
 //Estados : | A. Mesa de ayuda | Ticket | `ABIERTO`, `EN_PROGRESO`, `RESUELTO`, `CERRADO` |
