@@ -1,9 +1,16 @@
 import type { IPublicUser, IUserCreate } from "./IAuthRepository.js"
 
-export type IUserLogin = Pick<IUserCreate, "email" | "password">
+export interface createUserDTO{
+  name: string;
+  email: string;
+  password: string;
+  roles?: string[];
+}
+
+export type IUserLogin = Pick<createUserDTO, "email" | "password">
 
 export interface IAuthService { 
-    create(data: IUserCreate): Promise<IPublicUser>
+    create(data: createUserDTO ): Promise<IPublicUser>
     getByEmail(email: string): Promise<IPublicUser | null >
     login(data: IUserLogin): Promise<IPublicUser | null >
 }

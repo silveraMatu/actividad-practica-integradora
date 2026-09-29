@@ -1,15 +1,17 @@
+import type { Types } from "mongoose"
+
 export interface IUserCreate{
     name: string,
     email: string,
     password: string,
-    roleId: string
+    roles: Types.ObjectId[]
 }
 
 export interface IPublicUser{
     id: string,
     name: string,
     email: string,
-    roleId: string
+    roles: Types.ObjectId[]
 }
 
 export interface IAuthRepository { 
