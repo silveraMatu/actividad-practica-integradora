@@ -13,6 +13,6 @@ export interface IPublicUser{
 }
 
 export interface IAuthRepository { 
-    create(data: IUserCreate): Promise<void>
+    create(data: IUserCreate): Promise<IPublicUser>
     getByEmail(email: string): Promise<IPublicUser | null >
 }
