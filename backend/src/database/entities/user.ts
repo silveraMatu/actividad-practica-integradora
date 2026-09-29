@@ -15,8 +15,8 @@ const UserSchema: Schema = new Schema(
         roleId: {type: String, required: true},
     },        
     {
-            timestamps: true
+        timestamps: true
     }
 )
 
-export const Usar = mongoose.model<iUser>("User", UserSchema)
+export const User = mongoose.model<iUser>("User", UserSchema)
