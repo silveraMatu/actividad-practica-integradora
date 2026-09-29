@@ -1,14 +1,17 @@
 import { Types } from "mongoose";
 import { comparePassword, hash } from "./helpers/bcrypt.js";
-import type { IAuthRepository, IPublicUser, IPublicUserLogin, IUserCreate } from "./interfaces/IAuthRepository.js";
+import type { IAuthRepository, IPublicUser, IPublicUserLogin } from "./interfaces/IAuthRepository.js";
 import type { createUserDTO, IAuthService, IUserLogin } from "./interfaces/IAuthService.js";
-import { Role } from "../../database/entities/role.js";
 import { createToken } from "./helpers/jwt.js";
-import { User, type iUser } from "../../database/entities/user.js";
+import { type iUser } from "../../database/entities/user.js";
+import type { IRoleRepository } from "../roles/role.repository.js";
 
 
 export class AuthService implements IAuthService{
-    constructor(private readonly authRepository: IAuthRepository){}
+    constructor(
+        private readonly authRepository: IAuthRepository,
+        private readonly roleRepository: IRoleRepository
+        ){}
 
     async create(data: createUserDTO): Promise<IPublicUser> {
         const {name, email, password, roles} = data
@@ -17,9 +20,9 @@ export class AuthService implements IAuthService{
         let rolesObjectId: Types.ObjectId[] = []
 
         if(roles && roles.length > 0){
-            const formatedRoles = roles.map(r=> r.toLowerCase())
+            const formatedRoles = roles.map(rol => rol.toLowerCase())
 
-            const foundRoles = await this.authRepository.getRolByName(formatedRoles)
+            const foundRoles = await this.roleRepository.getByNames(formatedRoles)
 
             if(foundRoles.length < 0)
                 throw new Error("Ninguno de los roles especificados es válido")
@@ -27,7 +30,7 @@ export class AuthService implements IAuthService{
             rolesObjectId = foundRoles.map(role => role._id as Types.ObjectId)
             
         }else{
-            const defaultRole = await Role.findOne({name: "user"}).exec()
+            const defaultRole = await this.roleRepository.getDefault()
             if(!defaultRole)
                 throw new Error("El rol por defecto 'user' no está configurado en la base de datos.")
             rolesObjectId = [defaultRole._id as Types.ObjectId]
@@ -53,7 +56,7 @@ export class AuthService implements IAuthService{
     }
 
     async login(data: IUserLogin):Promise<IPublicUserLogin | null >{
-        const user = await this.getByEmail(data.email)
+        const user = await this.authRepository.getByEmailWIthRoles(data.email)
 
         //logica para ver si la contraseña esta bien, emitir token, etc
         const passwordCorrect = await comparePassword(data.password, user!.password)
@@ -62,18 +65,12 @@ export class AuthService implements IAuthService{
         }
 
         //obtener el rol
-        const roleIds = user!.roles.map(rol=> rol._id)
-        
-        const foundRoles = await Role.find({ _id: { $in: roleIds } }).exec();
-        const rolesName = foundRoles.map(rol => rol.name)
+        const rolesName = user!.roles
 
         const token = createToken(user!._id.toString(),  rolesName)
 
         const payload = {
-            _id: user!._id,
-            name: user!.name,
-            email: user!.email,
-            roles: user!.roles,
+            ...user!.toObject(),
             token: token 
         }
 

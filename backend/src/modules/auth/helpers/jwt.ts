@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
+import type { IRole } from '../../../database/entities/role.js';
 
 const SECRET = process.env.SECRET!;
 
 export const createToken = (
   userId: string,
-  role: string[],
+  role: Pick<IRole, "name">[],
 ): string => {
   const payload = {
     id: userId,

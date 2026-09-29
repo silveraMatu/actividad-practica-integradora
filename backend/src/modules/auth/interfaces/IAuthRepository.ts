@@ -17,7 +17,7 @@ export interface IPublicUser{
 }
 
 export interface IUserWithRoles extends Omit<iUser, "roles">{
-    roles: Array<Pick<IRole, '_id' | 'name'>>
+    roles: Array<Pick<IRole, 'name'>>
 }
 
 export interface IPublicUserLogin extends IPublicUser{
@@ -28,5 +28,4 @@ export interface IAuthRepository {
     create(data: IUserCreate): Promise<iUser>
     getByEmail(email: string): Promise<iUser | null >
     getByEmailWIthRoles(email: string): Promise<IUserWithRoles | null>
-    getRolByName(rolesName: string[]):Promise<IRole[]>
 }
