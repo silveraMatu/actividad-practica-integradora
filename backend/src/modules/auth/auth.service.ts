@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { comparePassword, hash } from "./helpers/bcrypt.js";
-import type { IAuthRepository, IPublicUser, IPublicUserLogin } from "./interfaces/IAuthRepository.js";
-import type { createUserDTO, IAuthService, IUserLogin } from "./interfaces/IAuthService.js";
+import type { IAuthRepository } from "./interfaces/IAuthRepository.js";
+import type { createUserDTO, IAuthService, IPublicUser, IPublicUserLogin, IUserLogin } from "./interfaces/IAuthService.js";
 import { createToken } from "./helpers/jwt.js";
 import { type iUser } from "../../database/entities/user.js";
 import type { IRoleRepository } from "../roles/role.repository.js";

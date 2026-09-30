@@ -1,5 +1,5 @@
+import { Types } from "mongoose";
 import type { iUser } from "../../../database/entities/user.js";
-import type { IPublicUser } from "./IAuthRepository.js"
 
 export interface createUserDTO{
   name: string;
@@ -8,10 +8,21 @@ export interface createUserDTO{
   roles?: string[];
 }
 
+export interface IPublicUser{
+    _id: Types.ObjectId,
+    name: string,
+    email: string,
+    roles: Types.ObjectId[]
+}
+
 export type IUserLogin = Pick<createUserDTO, "email" | "password">
+
+export interface IPublicUserLogin extends Omit<createUserDTO, "password">{
+    token: string
+}
 
 export interface IAuthService { 
     create(data: createUserDTO ): Promise<IPublicUser>
     getByEmail(email: string): Promise<iUser | null >
-    login(data: IUserLogin): Promise<IPublicUser | null >
+    login(data: IUserLogin): Promise<IPublicUserLogin | null >
 }

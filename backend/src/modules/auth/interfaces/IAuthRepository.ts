@@ -9,19 +9,8 @@ export interface IUserCreate{
     roles: Types.ObjectId[]
 }
 
-export interface IPublicUser{
-    _id: Types.ObjectId,
-    name: string,
-    email: string,
-    roles: Types.ObjectId[]
-}
-
 export interface IUserWithRoles extends Omit<iUser, "roles">{
     roles: Array<Pick<IRole, 'name'>>
-}
-
-export interface IPublicUserLogin extends IPublicUser{
-    token: string
 }
 
 export interface IAuthRepository { 
