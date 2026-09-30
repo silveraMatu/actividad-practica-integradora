@@ -405,7 +405,7 @@ Estas etapas son una guía; el historial de commits debería reflejar un recorri
 ## 11. Defensa oral
 
 - Duración aproximada: 15 minutos por grupo.
-- El grupo muestra el flujo completo: login con distintos roles, cambio de estado de un recurso, llegada de la notificación al usuario suscripto y la línea correspondiente en la consola del backend.
+- El grupo muestra el flujo completo: login con distintos roles, cambio de estado de un recurso, l legada de la notificación al usuario suscripto y la línea correspondiente en la consola del backend.
 - La cátedra hace preguntas a **cualquiera de los dos integrantes sobre cualquier parte del proyecto**. Ambos deben poder explicar los cuatro patrones y los principios SOLID aplicados.
 - Puede pedirse una modificación en vivo (por ejemplo, agregar un canal de notificación nuevo o un permiso nuevo).
 - **La nota es individual**: el trabajo es grupal, pero cada integrante es evaluado según su desempeño en la defensa y su participación en el historial de commits.
