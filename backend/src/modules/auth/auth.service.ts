@@ -57,6 +57,8 @@ export class AuthService implements IAuthService{
 
     async login(data: IUserLogin):Promise<IPublicUserLogin | null >{
         const user = await this.authRepository.getByEmailWIthRoles(data.email)
+        if(!user)
+          throw new Error("Credenciales inválidas")
 
         //logica para ver si la contraseña esta bien, emitir token, etc
         const passwordCorrect = await comparePassword(data.password, user!.password)
