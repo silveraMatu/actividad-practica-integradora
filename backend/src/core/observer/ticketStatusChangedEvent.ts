@@ -1,7 +1,7 @@
 export interface TicketStatusChangedEvent {
   ticketId: string;
   ticketTitle: string;
-  oldStatus: string;
+  previousStatus: string;
   newStatus: string;
   updatedAt: Date;
 }

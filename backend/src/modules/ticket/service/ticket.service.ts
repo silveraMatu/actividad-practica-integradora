@@ -1,3 +1,4 @@
+import { NotFoundError } from "../../../core/errors/appError.js";
 import type {
   ITicketRepository,
   CreateTicketDTO,
@@ -6,39 +7,54 @@ import {
   type Iticket,
   TicketStatus,
 } from "../ticket.entity.js";
+import { IticketService } from "./ticket.service.types.js";
 
-export class TicketService {
+export class TicketService implements IticketService {
   //inyectamos dependencia por constructor
   constructor(private ticketRepo: ITicketRepository) {}
 
   async createTicket(data: CreateTicketDTO): Promise<Iticket> {
-    return await this.ticketRepo.create(data);
+    const {title, description, userId}:CreateTicketDTO = data;
+    return await this.ticketRepo.create({title, description, userId});
   }
 
-  async getAllTicket(): Promise<Iticket[]> {
+  async getAllTickets(): Promise<Iticket[]> {
     return await this.ticketRepo.findAll();
   }
 
-  async getByIdTicket(id: string): Promise<Iticket> {
+  async getTicketById(id: string): Promise<Iticket | null> {
     const ticket = await this.ticketRepo.findById(id);
     if (!ticket) {
-      throw new Error("No se encontro el ticket");
+      throw new NotFoundError("No se encontro el ticket");
     }
     return ticket;
   }
 
   async changeStatus(id: string, newStatus: TicketStatus): Promise<Iticket> {
-    //comprobamos si existe el ticket
-    const ticket = await this.getByIdTicket(id);
+    const ticket = await this.getTicketById(id);
 
-    //guardamos el estado anterior para la notificacion
-    const previusStatus = ticket.status;
+    const previusStatus = ticket!.status;
 
-    //aca cambiamos el estado en la bd usando el repositorio
     const updateTicket = await this.ticketRepo.updateStatus(id, newStatus);
     if (!updateTicket) {
       throw new Error("Error al actualizar el ticket");
     }
+
+    if(previusStatus === newStatus){
+      return updateTicket;
+    }
+    //logica de notificacion mediante notification service
     return updateTicket;
+  }
+
+  async deleteTicket(id: string): Promise<boolean> {
+    await this.getTicketById(id);
+
+    const deleted = await this.ticketRepo.delete(id);
+    if (!deleted) {
+      throw new Error("Error al eliminar el ticket");
+    }
+
+    return deleted;
   }
 }

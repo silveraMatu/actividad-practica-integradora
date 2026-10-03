@@ -1,9 +1,8 @@
-import type { promises } from "dns";
 import {
   Ticket,
   type Iticket,
   TicketStatus,
-} from "../../core/database/entities/ticket.js";
+} from "../ticket.entity.js";
 import type {
   ITicketRepository,
   CreateTicketDTO,
@@ -22,10 +21,7 @@ export class TicketRepository implements ITicketRepository {
     return await Ticket.find();
   }
 
-  async updateStatus(
-    id: string,
-    status: TicketStatus,
-  ): Promise<Iticket | null> {
+  async updateStatus(id: string, status: TicketStatus,): Promise<Iticket | null> {
     return await Ticket.findByIdAndUpdate(
       id,
       { status: status },
