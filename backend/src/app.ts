@@ -1,6 +1,7 @@
 import "dotenv/config"
 import express , {Request, Response} from "express"
 import { router } from "./modules/routes.js";
+import { errorHandler } from "./core/middlewares/errorHandler.js";
 
 export const app = express();
 
@@ -12,3 +13,5 @@ app.get("/", (req: Request, res: Response) => {
     status: "ok",
   });
 });
+
+app.use(errorHandler)

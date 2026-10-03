@@ -1,3 +1,4 @@
+import { BadRequestError, UnauthorizedError } from "../../../core/errors/appError.js";
 import { IPasswordHasher } from "../../../core/security/hasher/IPasswordHasher.js";
 import { createToken } from "../../../core/security/jwt.js";
 import type { IRoleRepository } from "../../roles/role.repository.js";
@@ -26,7 +27,7 @@ export class AuthService implements IAuthService {
     const defaultRoleId = defaultRole!._id;
   
     const emailExist = await this.userRepo.findByEmail(email.toLowerCase());
-    if (emailExist) throw new Error("Este email ya se encuentra en uso");
+    if (emailExist) throw new BadRequestError("Este email ya se encuentra en uso");
 
     const passwordHash = await this.hasher.hash(password);
 
@@ -50,7 +51,7 @@ export class AuthService implements IAuthService {
   async login(data: IUserLogin): Promise<userWithToken | null> {
     const user = await this.userRepo.findByEmailWIthRol(data.email);
 
-    if (!user) throw new Error("Credenciales inválidas");
+    if (!user) throw new UnauthorizedError("Credenciales inválidas");
 
     const passwordCorrect = this.hasher.compare(data.password, user!.password);
 

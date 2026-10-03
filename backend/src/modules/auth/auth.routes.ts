@@ -4,6 +4,8 @@ import { AuthService } from "./services/auth.service.js";
 import { AuthController } from "./auth.controller.js";
 import { UserRepository } from "../user/repository/user.repository.js";
 import { bcryptService } from "../../core/security/hasher/bcrypt.js";
+import { loginValidator, registerValidator } from "./auth.validator.js";
+import { validate } from "../../core/middlewares/validate.js";
 
 export const authRouter = Router();
 
@@ -13,6 +15,6 @@ const hasher =  new bcryptService()
 const authService = new AuthService(userRepo, roleRepo, hasher);
 const controller = new AuthController(authService);
 
-authRouter.post("/register", controller.register);
-authRouter.post("/login", controller.login);
+authRouter.post("/register", registerValidator, validate, controller.register);
+authRouter.post("/login", loginValidator, validate, controller.login);
 authRouter.post("/logout", controller.logout);
