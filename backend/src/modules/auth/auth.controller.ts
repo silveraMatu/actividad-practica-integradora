@@ -21,18 +21,27 @@ export class AuthController {
     try {
       const user = await this.authService.login(req.body);
 
-      res.cookie("token", user?.token);
+      res.cookie("token", user?.token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60
+      });
 
-      res.status(204);
+      res.status(200).json({
+        status: "OK",
+        message: "Inicio de sesión exitoso",
+      });
     } catch (err) {
       next(err);
     }
   };
 
-  logout = async (_req: Request, res: Response, next: NextFunction) => {
+  logout = (_req: Request, res: Response, next: NextFunction) => {
     try {
       res.clearCookie("token");
-      res.status(204);
+      res.status(200).json( {
+          status: "OK",
+          message: "Has cerrado sesión"
+        });
     } catch (err) {
       next(err);
     }

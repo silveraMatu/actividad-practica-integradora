@@ -18,7 +18,6 @@ export class UserRepository implements IUserRepository{
     const user = await User
     .findOne({email})
     .populate("rol", "name")
-    .select("name")
     .lean<IUserWithRol>()
     .exec() 
 

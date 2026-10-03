@@ -53,7 +53,7 @@ export class AuthService implements IAuthService {
 
     if (!user) throw new UnauthorizedError("Credenciales inválidas");
 
-    const passwordCorrect = this.hasher.compare(data.password, user!.password);
+    const passwordCorrect = await this.hasher.compare(data.password, user.password);
 
     if (!passwordCorrect) throw new Error("Credenciales inválidas");
 
@@ -61,11 +61,14 @@ export class AuthService implements IAuthService {
 
     const token = createToken(user!._id.toString(), rol);
 
-    const payload = {
-      ...user!.toObject(),
-      token: token,
-    };
+    const publicUser: userWithToken = {
+      _id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      rol: user.rol.name,
+      token: token
+    }
 
-    return payload;
+    return publicUser;
   }
 }

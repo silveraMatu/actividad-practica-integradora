@@ -41,6 +41,19 @@ export class Database {
 
     return this.connectionPromise;
   }
+
+  public async disconnect() {
+    try {
+    await this.connection?.disconnect()
+    console.log("Desconectado de la base de datos.")
+    } catch(err) {
+      console.log("Error al desconectar la base de datos", err)
+      throw err
+    } finally {
+      this.connection = null
+      this.connectionPromise = null
+    }
+  }
 }
 
 export const db = Database.getInstance();

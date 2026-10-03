@@ -20,19 +20,19 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  backend:
-    build: ./backend
-    container_name: backend
-    restart: always
-    env_file:
-      - ./backend/.env
-    ports:
-      - "3000:3000"
-    environment:
-      MONGO_URI: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/${MONGO_DB_NAME}?authSource=admin
-    depends_on:
-      mongo:
-        condition: service_healthy
+  # backend:
+  #   build: ./backend
+  #   container_name: backend
+  #   restart: always
+  #   env_file:
+  #     - ./backend/.env
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     MONGO_URI: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/${MONGO_DB_NAME}?authSource=admin
+  #   depends_on:
+  #     mongo:
+  #       condition: service_healthy
 
 volumes:
   mongo-data:
