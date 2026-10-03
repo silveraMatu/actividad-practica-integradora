@@ -1,5 +1,5 @@
 import { body, param } from "express-validator";
-import { TicketStatus } from "./ticket.entity.js";
+import { TicketStatus } from "./ticket.model.js";
 
 export const createTicketValidations = [
   body("title")

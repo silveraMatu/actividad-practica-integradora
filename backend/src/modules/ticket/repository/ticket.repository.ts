@@ -2,7 +2,7 @@ import {
   Ticket,
   type Iticket,
   TicketStatus,
-} from "../ticket.entity.js";
+} from "../ticket.model.js";
 import type {
   ITicketRepository,
   CreateTicketDTO,

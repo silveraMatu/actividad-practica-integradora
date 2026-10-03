@@ -1,7 +1,7 @@
 import {
   type Iticket,
   TicketStatus,
-} from "../ticket.entity.js";
+} from "../ticket.model.js";
 
 export interface CreateTicketDTO {
   title: string;

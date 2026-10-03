@@ -1,5 +1,5 @@
 import { CreateTicketDTO } from "../repository/ticket.repository.types.js";
-import { Iticket, TicketStatus } from "../ticket.entity.js";
+import { Iticket, TicketStatus } from "../ticket.model.js";
 
 export interface IticketService {
   createTicket(data: CreateTicketDTO): Promise<Iticket>;

@@ -7,7 +7,7 @@ import type {
 import {
   type Iticket,
   TicketStatus,
-} from "../ticket.entity.js";
+} from "../ticket.model.js";
 import { IticketService } from "./ticket.service.types.js";
 
 export class TicketService implements IticketService {

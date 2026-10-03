@@ -1,4 +1,4 @@
-import { Role, type IRole } from "./role.entity.js";
+import { Role, type IRole } from "./role.model.js";
 
 export interface IRoleRepository {
   getDefault(): Promise<IRole | null>;

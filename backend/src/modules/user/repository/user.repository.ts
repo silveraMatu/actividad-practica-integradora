@@ -1,5 +1,5 @@
 import { IUserCreate, IUserWithRol } from "../repository/user.repository.types.js";
-import { iUser, User } from "../user.entity.js";
+import { iUser, User } from "../user.model.js";
 import { IUserRepository } from "./user.repository.types.js";
 
 export class UserRepository implements IUserRepository{
