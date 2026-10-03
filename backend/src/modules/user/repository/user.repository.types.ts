@@ -19,4 +19,5 @@ export interface IUserRepository {
   create(data: IUserCreate): Promise<iUser>;
   findByEmail(email: string): Promise<iUser | null>;
   findByEmailWIthRol(email: string): Promise<IUserWithRol | null>;
+  findById(id: string): Promise<iUser | null>;
 }

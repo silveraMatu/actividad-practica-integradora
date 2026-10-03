@@ -1,4 +1,5 @@
 import { NotFoundError } from "../../../core/errors/appError.js";
+import { IUserRepository } from "../../user/repository/user.repository.types.js";
 import type {
   ITicketRepository,
   CreateTicketDTO,
@@ -11,15 +12,28 @@ import { IticketService } from "./ticket.service.types.js";
 
 export class TicketService implements IticketService {
   //inyectamos dependencia por constructor
-  constructor(private ticketRepo: ITicketRepository) {}
+  constructor(
+    private readonly ticketRepo: ITicketRepository,
+    private readonly userRepo: IUserRepository)
+  { }
 
   async createTicket(data: CreateTicketDTO): Promise<Iticket> {
-    const {title, description, userId}:CreateTicketDTO = data;
+    const { title, description, userId }: CreateTicketDTO = data;
+    const userExist = await this.userRepo.findById(userId)
+
+    if (!userExist) {
+      throw new NotFoundError("No se encontro el usuario");
+    }
+    
     return await this.ticketRepo.create({title, description, userId});
   }
 
   async getAllTickets(): Promise<Iticket[]> {
-    return await this.ticketRepo.findAll();
+    const tickets = await this.ticketRepo.findAll();
+    if (!tickets) {
+      throw new NotFoundError("No se encontraron tickets");
+    }
+    return tickets;
   }
 
   async getTicketById(id: string): Promise<Iticket | null> {
@@ -32,17 +46,16 @@ export class TicketService implements IticketService {
 
   async changeStatus(id: string, newStatus: TicketStatus): Promise<Iticket> {
     const ticket = await this.getTicketById(id);
-
-    const previusStatus = ticket!.status;
+    // const previusStatus = ticket.status;
 
     const updateTicket = await this.ticketRepo.updateStatus(id, newStatus);
     if (!updateTicket) {
       throw new Error("Error al actualizar el ticket");
     }
 
-    if(previusStatus === newStatus){
-      return updateTicket;
-    }
+    // if(previusStatus === newStatus){
+    //   return updateTicket;
+    // }
     //logica de notificacion mediante notification service
     return updateTicket;
   }

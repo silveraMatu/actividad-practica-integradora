@@ -24,9 +24,12 @@ export class TicketRepository implements ITicketRepository {
   async updateStatus(id: string, status: TicketStatus,): Promise<Iticket | null> {
     return await Ticket.findByIdAndUpdate(
       id,
-      { status: status },
-      { new: true },
-    );
+      { $set:{status: status }},
+      {
+        returnDocument: 'after',
+        runValidators: true,
+      },
+    ).exec();
   }
 
   async delete(id: string): Promise<boolean> {

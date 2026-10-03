@@ -1,9 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
 import { TicketService } from "./service/ticket.service.js";
+import { IticketService } from "./service/ticket.service.types.js";
 
 export class TicketController {
   //inyectamos el servicio por constructor
-  constructor(private ticketService: TicketService) {}
+  constructor(private ticketService: IticketService) {}
 
   create = async (req: Request, res: Response, next: NextFunction,): Promise<void> => {
     try {
@@ -54,9 +55,9 @@ export class TicketController {
   changeStatus = async (req: Request, res: Response, next: NextFunction,): Promise<void> => {
     try {
       const { id } = req.params;
-      const { newStatus } = req.body;
+      const { status } = req.body;
 
-      const updatedTicket = await this.ticketService.changeStatus(id!.toString(), newStatus);
+      const updatedTicket = await this.ticketService.changeStatus(id!.toString(), status);
 
       res.status(200).json({
         status: "OK",
@@ -75,7 +76,7 @@ export class TicketController {
 
       await this.ticketService.deleteTicket(id!.toString());
 
-      res.status(204);  
+      res.status(204).send();
     } catch (err) {
       next(err);
     }

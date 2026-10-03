@@ -23,4 +23,9 @@ export class UserRepository implements IUserRepository{
 
     return user ?? null
   }
+
+  async findById(id: string): Promise<iUser | null> {
+    const user = await User.findById(id).exec()
+    return user ?? null
+  }
 }
