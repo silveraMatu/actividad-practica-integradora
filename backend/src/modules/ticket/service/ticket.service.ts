@@ -1,11 +1,11 @@
 import type {
   ITicketRepository,
   CreateTicketDTO,
-} from "./ITicketRepository.js";
+} from "../repository/ticket.repository.types.js";
 import {
   type Iticket,
   TicketStatus,
-} from "../../core/database/entities/ticket.js";
+} from "../ticket.entity.js";
 
 export class TicketService {
   //inyectamos dependencia por constructor

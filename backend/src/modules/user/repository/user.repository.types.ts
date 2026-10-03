@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { iUser } from "../user.entity.js";
-import { IRole } from "../../../core/database/entities/role.js";
+import { IRole } from "../../roles/role.entity.js";
 import { userResponseDTO } from "../dto/user.dto.js";
 
 export interface IUserCreate {

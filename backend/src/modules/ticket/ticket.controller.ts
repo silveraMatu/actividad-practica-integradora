@@ -1,6 +1,6 @@
 import  type {  Request, Response } from 'express'
-import { TicketService } from './TicketService.js'
-import { TicketStatus } from '../../core/database/entities/ticket.js'
+import { TicketService } from './service/ticket.service.js'
+import { TicketStatus } from './ticket.entity.js'
 
 export class TicketController {
     //inyectamos el servicio por constructor
@@ -16,7 +16,7 @@ export class TicketController {
             const newTicket = await this.ticketService.createTicket({ title, description, userId })
             
             //respomdemos con http de recurso creado
-            res.status(400).json({ message: error.message });
+            // res.status(400).json({ message: error.message });
         } catch (error) {
             
         }

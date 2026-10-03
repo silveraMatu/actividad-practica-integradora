@@ -7,7 +7,7 @@ import {
 import type {
   ITicketRepository,
   CreateTicketDTO,
-} from "./ITicketRepository.js";
+} from "./ticket.repository.types.js";
 
 export class TicketRepository implements ITicketRepository {
   async create(data: CreateTicketDTO): Promise<Iticket> {
