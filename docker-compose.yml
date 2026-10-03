@@ -6,7 +6,7 @@ services:
     env_file:
       - ./backend/.env
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh mongodb://admin:admin@localhost:27017/?authSource=admin --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh "mongodb://${MONGO_USER}:${MONGO_PASSWORD}@localhost:27017/?authSource=admin" --quiet
       interval: 10s
       timeout: 10s
       retries: 5
@@ -14,9 +14,9 @@ services:
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${env.MONGO_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${env.MONGO_PASSWORD}
-      MONGO_INITDB_DATABASE: ${env.MONGO_DB_NAME}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB_NAME}
     volumes:
       - mongo-data:/data/db
 
@@ -29,14 +29,10 @@ services:
     ports:
       - "3000:3000"
     environment:
-      MONGO_URI: mongodb://admin:admin@mongo:27017
-      MONGO_DB_NAME: ${env.MONGO_DB_NAME}
-      MONGO_USER: ${env.MONGO_USER}
-      MONGO_PASSWORD: ${env.MONGO_PASSWORD}
-      SECRET: ${env.SECRET}
-      SALT: ${env.SALT}
+      MONGO_URI: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/${MONGO_DB_NAME}?authSource=admin
     depends_on:
       mongo:
         condition: service_healthy
+
 volumes:
-  mongo-data:   
+  mongo-data:
