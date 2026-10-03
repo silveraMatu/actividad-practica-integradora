@@ -1,16 +1,18 @@
 import { Router } from "express";
-import { AuthRepository } from "./auth.repository.js";
 import { RoleRepository } from "../roles/role.repository.js";
-import { AuthService } from "./auth.service.js";
+import { AuthService } from "./services/auth.service.js";
 import { AuthController } from "./auth.controller.js";
+import { UserRepository } from "../user/repository/user.repository.js";
+import { bcryptService } from "../../core/security/hasher/bcrypt.js";
 
-export const authRouter = Router()
+export const authRouter = Router();
 
-const authRepository = new AuthRepository()
-const roleRepository = new RoleRepository()
-const authService = new AuthService(authRepository, roleRepository)
-const controller = new AuthController(authService)
+const userRepo = new UserRepository()
+const roleRepo = new RoleRepository();
+const hasher =  new bcryptService()
+const authService = new AuthService(userRepo, roleRepo, hasher);
+const controller = new AuthController(authService);
 
-authRouter.post('/register', controller.register)
-authRouter.post('/login', controller.login)
-authRouter.post('/logout', controller.logout)
+authRouter.post("/register", controller.register);
+authRouter.post("/login", controller.login);
+authRouter.post("/logout", controller.logout);

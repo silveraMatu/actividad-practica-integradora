@@ -1,21 +1,23 @@
-
-import {type Iticket, TicketStatus } from '../../database/entities/ticket.js'
+import {
+  type Iticket,
+  TicketStatus,
+} from "../../core/database/entities/ticket.js";
 
 export interface CreateTicketDTO {
-    title: string, 
-    description: string,
-    userId: string
+  title: string;
+  description: string;
+  userId: string;
 }
 
 export interface ITicketRepository {
-    //crea un nuevo ticket en la bd
-    create( data: CreateTicketDTO ): Promise<Iticket>;
+  //crea un nuevo ticket en la bd
+  create(data: CreateTicketDTO): Promise<Iticket>;
 
-    findById( id: string): Promise<Iticket | null>;
+  findById(id: string): Promise<Iticket | null>;
 
-    findAll(): Promise<Iticket[]>;
+  findAll(): Promise<Iticket[]>;
 
-    updateStatus( id: string, status: TicketStatus ): Promise<Iticket | null>
+  updateStatus(id: string, status: TicketStatus): Promise<Iticket | null>;
 
-    delete( id: string ): Promise<boolean>
+  delete(id: string): Promise<boolean>;
 }

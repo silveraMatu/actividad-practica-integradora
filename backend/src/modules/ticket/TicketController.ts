@@ -1,6 +1,6 @@
 import  type {  Request, Response } from 'express'
 import { TicketService } from './TicketService.js'
-import { TicketStatus } from '../../database/entities/ticket.js'
+import { TicketStatus } from '../../core/database/entities/ticket.js'
 
 export class TicketController {
     //inyectamos el servicio por constructor

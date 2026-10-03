@@ -5,7 +5,7 @@ export interface iUser extends Document {
     name: string,
     email: string,
     password: string,
-    roles: Types.ObjectId[]
+    rol: Types.ObjectId
 }
 
 const UserSchema: Schema = new Schema(
@@ -13,11 +13,11 @@ const UserSchema: Schema = new Schema(
         name: {type: String, required: true, trim: true},
         email: {type: String, required: true, unique: true, lowercase: true},
         password: {type: String, required: true},
-        roles: [{
+        rol: {
             type: Schema.Types.ObjectId,
             ref: "Role",
             required: true
-        }]
+        }
     },        
     {
         timestamps: true
