@@ -8,7 +8,6 @@ export class EventPublisher implements ISubject{
   observers: IObserver[] = []
   
   attach(observer: IObserver): void {
-    console.log("attaching observer", observer)
     const isExist = this.observers.includes(observer)
     if (!isExist)
       this.observers.push(observer)

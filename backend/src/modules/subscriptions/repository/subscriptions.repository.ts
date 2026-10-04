@@ -1,6 +1,14 @@
+import { Types } from "mongoose";
 import { ISubscription, Subscription } from "../subscription.model.js";
-import { IsubscriptionPopulated, ISubscriptionRepository } from "./subscriptions.repository.types.js";
+import { ISubscriberView, ISubscriptionRepository } from "./subscriptions.repository.types.js";
 import { CreateSubscriptionDTO } from "../dto/subscription.dto.js";
+import { iUser } from "../../user/user.model.js";
+
+type LeanSubscriptionWithUser = {
+  _id: Types.ObjectId;
+  ticketId: Types.ObjectId;
+  userId: iUser;
+};
 
 export class SubscriptionRepository implements ISubscriptionRepository {
   async create(subscription: CreateSubscriptionDTO): Promise<ISubscription> {
@@ -24,13 +32,22 @@ export class SubscriptionRepository implements ISubscriptionRepository {
       .exec();
   }
 
-  async findAllSubscriptionsByTicket(ticketId: string): Promise<IsubscriptionPopulated[]> {
+  async findAllSubscriptionsByTicket(ticketId: string): Promise<ISubscriberView[]> {
     const subscriptions = await Subscription
       .find({ ticketId })
       .populate("userId")
-      .lean<IsubscriptionPopulated[]>()
+      .lean<LeanSubscriptionWithUser[]>()
       .exec();
-    return subscriptions;
+
+    return subscriptions.map((sub) => ({
+      _id: sub._id.toString(),
+      ticketId: sub.ticketId.toString(),
+      user: {
+        id: sub.userId._id.toString(),
+        name: sub.userId.name,
+        email: sub.userId.email,
+      },
+    }));
   }
 
   async findOne(userId: string, ticketId: string): Promise<ISubscription | null> {

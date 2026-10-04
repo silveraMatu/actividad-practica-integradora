@@ -58,19 +58,4 @@ export class SubscriptionController{
       next(err)
     }
   }
-
-  //BORRAR
-  getALlSubscriptionsByTicketId = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const ticketId = req.params.ticketId?.toString()!
-      const subscriptions = await this.subscriptionService.findSubscriptionsByTicket(ticketId)
-      res.status(200).json({
-        status: "OK",
-        statusCode: 200,
-        data: subscriptions
-      })
-    } catch (err) {
-      next(err)
-    }
-  }
 }

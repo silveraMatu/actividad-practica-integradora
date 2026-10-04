@@ -1,4 +1,4 @@
-import { BadRequestError, UnauthorizedError } from "../../../common/errors/appError.js";
+import { AppError, BadRequestError, UnauthorizedError } from "../../../common/errors/appError.js";
 import { IPasswordHasher } from "../../../common/security/hasher/IPasswordHasher.js";
 import { createToken } from "../../../common/security/jwt.js";
 import type { IRoleRepository } from "../../roles/role.repository.js";
@@ -20,8 +20,9 @@ export class AuthService implements IAuthService {
     const defaultRole = await this.roleRepo.getDefault();
     
     if (!defaultRole)
-      throw new Error(
+      throw new AppError(
         "El rol por defecto 'usuario' no está configurado en la base de datos.",
+        500,
       );
     
     const defaultRoleId = defaultRole!._id;

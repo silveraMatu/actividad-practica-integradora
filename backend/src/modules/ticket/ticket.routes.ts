@@ -10,6 +10,7 @@ import { authMiddleware as auth } from "../../common/middlewares/auth.middleware
 import { requireRole as role } from "../../common/middlewares/role.middleware.js";
 import { EventPublisher } from "../../common/observer/EventPublisher.js";
 import { NotificationService } from "../notifications/services/notification.service.js";
+import { NotificationRepository } from "../notifications/repository/notification.repository.js";
 
 export const ticketRouter = Router();
 
@@ -17,10 +18,11 @@ export const ticketRouter = Router();
 const ticketRepo = new TicketRepository();
 const userRepo = new UserRepository();
 const subscriptionRepo = new SubscriptionRepository();
+const notificationRepo = new NotificationRepository();
 
 // Temporal para probar observer
 const eventPublisher = new EventPublisher();
-const notificationService = new NotificationService(subscriptionRepo);
+const notificationService = new NotificationService(subscriptionRepo, notificationRepo);
 eventPublisher.attach(notificationService)
 //---------------------------------------------------
 

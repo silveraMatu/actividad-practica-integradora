@@ -1,6 +1,6 @@
-import { INotificationResponse } from "../dto/notification.dto.js";
 import { NotificationRepository } from "../repository/notification.repository.js";
 import { INotificationRepository } from "../repository/notification.repository.types.js";
+import { AppError } from "../../../common/errors/appError.js";
 
 
 interface Notification{
@@ -14,7 +14,7 @@ interface INotifier{
   send(notification: Notification ): Promise<void>;
 }
 
-class inAppNotifier implements INotifier {
+class InAppNotifier implements INotifier {
   constructor(private readonly notificationRepo: INotificationRepository) {}
 
   async send(notification: Notification): Promise<void> {
@@ -52,11 +52,11 @@ export class NotifierFactory{
   static createNotifier(type: NotifierType): INotifier {
     switch (type) {
       case "inapp":
-        return new inAppNotifier(new NotificationRepository());
+        return new InAppNotifier(new NotificationRepository());
       case "console":
         return new ConsoleNotifierAdapter();
       default:
-        throw new Error(`Tipo de notificador desconocido: ${type}`);
+        throw new AppError(`Tipo de notificador desconocido: ${type}`, 500);
     }
   }
 } 

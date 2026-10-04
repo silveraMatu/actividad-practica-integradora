@@ -1,5 +1,4 @@
-//create
-export interface INotificationDTO {
+export interface CreateNotificationDTO {
   userId: string;
   ticketId: string;
   message: string;

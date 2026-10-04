@@ -1,4 +1,4 @@
-import { NotFoundError } from "../../../common/errors/appError.js";
+import { AppError, NotFoundError } from "../../../common/errors/appError.js";
 import { IUserRepository } from "../../user/repository/user.repository.types.js";
 import { ISubscriptionRepository } from "../../subscriptions/repository/subscriptions.repository.types.js";
 import type {
@@ -57,7 +57,7 @@ export class TicketService implements IticketService {
 
     const updateTicket = await this.ticketRepo.updateStatus(id, newStatus);
     if (!updateTicket) {
-      throw new Error("Error al actualizar el ticket");
+      throw new AppError("Error al actualizar el ticket", 500);
     }
 
     if (previusStatus === newStatus) {
@@ -82,7 +82,7 @@ export class TicketService implements IticketService {
 
     const deleted = await this.ticketRepo.delete(id);
     if (!deleted) {
-      throw new Error("Error al eliminar el ticket");
+      throw new AppError("Error al eliminar el ticket", 500);
     }
 
     //limpieza en cascada de suscripciones huerfanas

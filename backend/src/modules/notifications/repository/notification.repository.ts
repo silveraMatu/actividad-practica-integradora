@@ -1,9 +1,9 @@
-import { INotificationDTO } from "../dto/notification.dto.js";
+import { CreateNotificationDTO } from "../dto/notification.dto.js";
 import { INotification, Notification } from "../notification.model.js";
 import { INotificationRepository } from "./notification.repository.types.js";
 
 export class NotificationRepository implements INotificationRepository {
-  async create(notification: INotificationDTO): Promise<INotification> {
+  async create(notification: CreateNotificationDTO): Promise<INotification> {
     return await Notification.create(notification);
   }
 

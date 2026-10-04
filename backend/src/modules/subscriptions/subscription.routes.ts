@@ -22,13 +22,6 @@ subscriptionRouter.get("/me",
   subscriptionController.getAllSubscriptionsByUserId
 );
 
-//BORRAR
-subscriptionRouter.get("/:ticketId",
-  auth,
-  role("admin", "operator", "user"),
-  subscriptionController.getALlSubscriptionsByTicketId
-);
-
 subscriptionRouter.post("/:ticketId",
   auth,
   role("admin", "operator", "user"),
