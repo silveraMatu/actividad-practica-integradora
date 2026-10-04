@@ -31,7 +31,7 @@ export class SubscriptionController{
   delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userId }: Pick<authUserPayload, "userId"> = req.user!
-      const subscriptionId = req.params.subscriptionId!.toString()
+      const subscriptionId = req.params.id!.toString()
 
       await this.subscriptionService.deleteSubscription(userId, subscriptionId)
       res.status(200).json({

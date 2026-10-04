@@ -1,35 +1,33 @@
 import { ISubscriptionRepository } from "../repository/subscriptions.repository.types.js";
 import { ISubscriptionService } from "./subscription.service.types.js";
-import { IUserRepository } from "../../user/repository/user.repository.types.js";
 import { ITicketRepository } from "../../ticket/repository/ticket.repository.types.js";
 import { ISubscription } from "../subscription.model.js";
 import { CreateSubscriptionDTO } from "../dto/subscription.dto.js";
 import { ConflictError, ForbiddenError, NotFoundError } from "../../../common/errors/appError.js";
 
-export class SubscriptionService implements ISubscriptionService { 
+export class SubscriptionService implements ISubscriptionService {
   constructor(
     private readonly subscriptionRepo: ISubscriptionRepository,
-    private readonly userRepo: IUserRepository,
     private readonly ticketRepo: ITicketRepository,
   )
   { }
 
   async createSubscription(subscription: CreateSubscriptionDTO): Promise<ISubscription> {
     const { userId, ticketId }: CreateSubscriptionDTO = subscription
-    
-    const ticket = await this.ticketRepo.findById(ticketId.toString());
+
+    const ticket = await this.ticketRepo.findById(ticketId);
     if (!ticket)
       throw new NotFoundError("Ticket no encontrado")
+
+    //evitar q el owner se suscriba a su propio ticket
+    if (ticket.ownerId.equals(userId))
+      throw new ConflictError("No puedes suscribirte a tu propio ticket")
 
     //evitar q un user se suscriba al mismo ticket
     const subscriptionExists = await this.subscriptionRepo.findOne(userId, ticketId);
     if (subscriptionExists)
       throw new ConflictError("Ya estás suscrito a este ticket")
 
-    //evitar q el owner se suscrica a su propio ticket
-    if (ticket.ownerId.equals(userId))
-      throw new ConflictError("No puedes suscribirte a tu propio ticket")
-    
     const newSubscription = await this.subscriptionRepo.create({
       userId: userId,
       ticketId: ticket._id.toString(),
@@ -46,28 +44,14 @@ export class SubscriptionService implements ISubscriptionService {
     if (!subscription.userId.equals(userId))
       throw new ForbiddenError("No tienes permiso para eliminar esta suscripción")
 
-    const { ticketId } = subscription
-    
-    const subscriptionExists = await this.subscriptionRepo.findOne(userId, ticketId.toString())
-    if (!subscriptionExists)
-      throw new NotFoundError("No estás suscrito a este ticket")
-    
     await this.subscriptionRepo.delete(subscriptionId);
   }
 
   async findSubscriptionsByUser(userId: string): Promise<ISubscription[]> {
-    const subscriptions = await this.subscriptionRepo.findAllSubscriptionsByUser(userId);
-    if (!subscriptions.length)
-      throw new NotFoundError("No se encontraron suscripciones")
-    
-    return subscriptions
+    return await this.subscriptionRepo.findAllSubscriptionsByUser(userId);
   }
 
   async findSubscriptionsByTicket(ticketId: string): Promise<ISubscription[]> {
-    const subscriptions = await this.subscriptionRepo.findAllSubscriptionsByTicket(ticketId);
-    if (!subscriptions.length)
-      throw new NotFoundError("No se encontraron suscripciones")
-    
-    return subscriptions
+    return await this.subscriptionRepo.findAllSubscriptionsByTicket(ticketId);
   }
 }
