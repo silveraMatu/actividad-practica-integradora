@@ -1,4 +1,4 @@
-import { ISubscriptionRepository } from "../repository/subscriptions.repository.types.js";
+import { IsubscriptionPopulated, ISubscriptionRepository } from "../repository/subscriptions.repository.types.js";
 import { ISubscriptionService } from "./subscription.service.types.js";
 import { ITicketRepository } from "../../ticket/repository/ticket.repository.types.js";
 import { ISubscription } from "../subscription.model.js";
@@ -57,7 +57,7 @@ export class SubscriptionService implements ISubscriptionService {
     return await this.subscriptionRepo.findAllSubscriptionsByUser(userId);
   }
 
-  async findSubscriptionsByTicket(ticketId: string): Promise<ISubscription[]> {
+  async findSubscriptionsByTicket(ticketId: string): Promise<IsubscriptionPopulated[]> {
     return await this.subscriptionRepo.findAllSubscriptionsByTicket(ticketId);
   }
 }

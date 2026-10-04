@@ -8,6 +8,7 @@ export class EventPublisher implements ISubject{
   observers: IObserver[] = []
   
   attach(observer: IObserver): void {
+    console.log("attaching observer", observer)
     const isExist = this.observers.includes(observer)
     if (!isExist)
       this.observers.push(observer)
@@ -20,13 +21,8 @@ export class EventPublisher implements ISubject{
   }
 
   async notify(event: TicketStatusChangedEvent): Promise<void> {
-    const results = await Promise.allSettled(
-      this.observers.map((observer) => observer.update(event))
-    )
-
-    for (const result of results) {
-      if (result.status === "rejected")
-        console.error("Error al notificar a un observer:", result.reason)
+    for (const observer of this.observers) {
+      await observer.update(event)
     }
   }
 }

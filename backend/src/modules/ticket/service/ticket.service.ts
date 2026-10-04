@@ -10,13 +10,17 @@ import {
   TicketStatus,
 } from "../ticket.model.js";
 import { IticketService } from "./ticket.service.types.js";
+import { ISubject } from "../../../common/observer/Isubject.js";
+import { TicketStatusChangedEvent } from "../../../common/observer/ticketStatusChangedEvent.js";
 
 export class TicketService implements IticketService {
   //inyectamos dependencia por constructor
   constructor(
     private readonly ticketRepo: ITicketRepository,
     private readonly userRepo: IUserRepository,
-    private readonly subscriptionRepo: ISubscriptionRepository)
+    private readonly subscriptionRepo: ISubscriptionRepository,
+    private readonly eventPublisher: ISubject,
+  )
   { }
 
   async createTicket(data: CreateTicketDTO): Promise<Iticket> {
@@ -48,17 +52,28 @@ export class TicketService implements IticketService {
 
   async changeStatus(id: string, newStatus: TicketStatus): Promise<Iticket> {
     const ticket = await this.getTicketById(id);
-    // const previusStatus = ticket.status;
+
+    const previusStatus = ticket!.status;
 
     const updateTicket = await this.ticketRepo.updateStatus(id, newStatus);
     if (!updateTicket) {
       throw new Error("Error al actualizar el ticket");
     }
 
-    // if(previusStatus === newStatus){
-    //   return updateTicket;
-    // }
-    //logica de notificacion mediante notification service
+    if (previusStatus === newStatus) {
+      return updateTicket;
+    }
+
+    const event: TicketStatusChangedEvent = {
+      ticketId: id,
+      ticketTitle: ticket!.title,
+      previousStatus: previusStatus,
+      newStatus,
+      updatedAt: new Date(),
+    };
+
+    await this.eventPublisher.notify(event);
+
     return updateTicket;
   }
 

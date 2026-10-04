@@ -8,14 +8,25 @@ import { UserRepository } from "../user/repository/user.repository.js";
 import { SubscriptionRepository } from "../subscriptions/repository/subscriptions.repository.js";
 import { authMiddleware as auth } from "../../common/middlewares/auth.middleware.js";
 import { requireRole as role } from "../../common/middlewares/role.middleware.js";
+import { EventPublisher } from "../../common/observer/EventPublisher.js";
+import { NotificationService } from "../notifications/services/notification.service.js";
 
 export const ticketRouter = Router();
+
 
 const ticketRepo = new TicketRepository();
 const userRepo = new UserRepository();
 const subscriptionRepo = new SubscriptionRepository();
-const ticketService = new TicketService(ticketRepo, userRepo, subscriptionRepo);
+
+// Temporal para probar observer
+const eventPublisher = new EventPublisher();
+const notificationService = new NotificationService(subscriptionRepo);
+eventPublisher.attach(notificationService)
+//---------------------------------------------------
+
+const ticketService = new TicketService(ticketRepo, userRepo, subscriptionRepo, eventPublisher);
 const ticketController = new TicketController(ticketService);
+
 
 
 ticketRouter.get("/",

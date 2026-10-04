@@ -1,5 +1,5 @@
 import { ISubscription, Subscription } from "../subscription.model.js";
-import { ISubscriptionRepository } from "./subscriptions.repository.types.js";
+import { IsubscriptionPopulated, ISubscriptionRepository } from "./subscriptions.repository.types.js";
 import { CreateSubscriptionDTO } from "../dto/subscription.dto.js";
 
 export class SubscriptionRepository implements ISubscriptionRepository {
@@ -24,11 +24,13 @@ export class SubscriptionRepository implements ISubscriptionRepository {
       .exec();
   }
 
-  async findAllSubscriptionsByTicket(ticketId: string): Promise<ISubscription[]> {
-    return await Subscription
+  async findAllSubscriptionsByTicket(ticketId: string): Promise<IsubscriptionPopulated[]> {
+    const subscriptions = await Subscription
       .find({ ticketId })
       .populate("userId")
+      .lean<IsubscriptionPopulated[]>()
       .exec();
+    return subscriptions;
   }
 
   async findOne(userId: string, ticketId: string): Promise<ISubscription | null> {
