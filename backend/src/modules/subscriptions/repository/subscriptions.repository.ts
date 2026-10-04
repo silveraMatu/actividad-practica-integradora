@@ -14,11 +14,15 @@ export class SubscriptionRepository implements ISubscriptionRepository {
   }
 
   async findAllSubscriptionsByUser(userId: string): Promise<ISubscription[]> {
-    return await Subscription.find({ userId }).exec();
+    return await Subscription
+      .find({ userId })
+      .populate("ticketId")
+      .exec();
   }
 
   async findAllSubscriptionsByTicket(ticketId: string): Promise<ISubscription[]> {
     return await Subscription.find({ ticketId }).exec();
+    //se pule despues
   }
   
 }

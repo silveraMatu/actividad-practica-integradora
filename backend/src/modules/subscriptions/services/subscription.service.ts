@@ -17,17 +17,17 @@ export class SubscriptionServic implements ISubscriptionService {
 
   async createSubscription(subscription: CreateSubscriptionDTO): Promise<ISubscription> {
     
-    const user = await this.userRepo.findById(subscription.userId);
+    const user = await this.userRepo.findById(subscription.userId.toString());
     if (!user)
       throw new NotFoundError("Usuario no encontrado")
 
-    const ticket = await this.ticketRepo.findById(subscription.ticketId);
+    const ticket = await this.ticketRepo.findById(subscription.ticketId.toString());
     if (!ticket)
       throw new NotFoundError("Ticket no encontrado")
 
     const newSubscription = await this.subscriptionRepo.create({
-      userId: user._id,
-      ticketId: ticket._id,
+      userId: user._id.toString(),
+      ticketId: ticket._id.toString(),
     })
 
     return newSubscription
