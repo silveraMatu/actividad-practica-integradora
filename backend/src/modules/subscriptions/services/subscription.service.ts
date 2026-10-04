@@ -22,10 +22,15 @@ export class SubscriptionService implements ISubscriptionService {
     if (!ticket)
       throw new NotFoundError("Ticket no encontrado")
 
+    //evitar q un user se suscriba al mismo ticket
     const subscriptionExists = await this.subscriptionRepo.findOne(userId, ticketId);
     if (subscriptionExists)
       throw new ConflictError("Ya estás suscrito a este ticket")
 
+    //evitar q el owner se suscrica a su propio ticket
+    if (ticket.ownerId.equals(userId))
+      throw new ConflictError("No puedes suscribirte a tu propio ticket")
+    
     const newSubscription = await this.subscriptionRepo.create({
       userId: userId,
       ticketId: ticket._id.toString(),
