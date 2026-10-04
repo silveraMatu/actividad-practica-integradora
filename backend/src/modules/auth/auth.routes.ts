@@ -3,9 +3,9 @@ import { RoleRepository } from "../roles/role.repository.js";
 import { AuthService } from "./services/auth.service.js";
 import { AuthController } from "./auth.controller.js";
 import { UserRepository } from "../user/repository/user.repository.js";
-import { bcryptService } from "../../core/security/hasher/bcrypt.js";
+import { bcryptService } from "../../common/security/hasher/bcrypt.js";
 import { loginValidator, registerValidator } from "./auth.validator.js";
-import { validate } from "../../core/middlewares/validate.js";
+import { validate } from "../../common/middlewares/validate.js";
 
 export const authRouter = Router();
 

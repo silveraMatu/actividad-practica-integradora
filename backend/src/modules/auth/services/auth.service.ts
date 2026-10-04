@@ -1,6 +1,6 @@
-import { BadRequestError, UnauthorizedError } from "../../../core/errors/appError.js";
-import { IPasswordHasher } from "../../../core/security/hasher/IPasswordHasher.js";
-import { createToken } from "../../../core/security/jwt.js";
+import { BadRequestError, UnauthorizedError } from "../../../common/errors/appError.js";
+import { IPasswordHasher } from "../../../common/security/hasher/IPasswordHasher.js";
+import { createToken } from "../../../common/security/jwt.js";
 import type { IRoleRepository } from "../../roles/role.repository.js";
 import { createUserDTO, userResponseDTO } from "../../user/dto/user.dto.js";
 import { IUserRepository } from "../../user/repository/user.repository.types.js";

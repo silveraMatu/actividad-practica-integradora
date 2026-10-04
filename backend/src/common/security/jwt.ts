@@ -1,13 +1,15 @@
 import jwt from 'jsonwebtoken';
+import { UnauthorizedError } from '../errors/appError.js';
+import { authUserPayload } from '../types/express.js';
 const SECRET = process.env.SECRET!;
 
 export const createToken = (
   userId: string,
-  role: string
+  rol: string
 ): string => {
   const payload = {
-    id: userId,
-    role,
+    userId,
+    rol,
   };
 
   const token = jwt.sign(payload, SECRET, {
@@ -17,11 +19,11 @@ export const createToken = (
   return token;
 };
 
-export const verifyToken = (token: string) => {
+export const verifyToken = (token: string): authUserPayload => {
   try {
     const decoded = jwt.verify(token, SECRET);
-    return decoded;
+    return decoded as authUserPayload;
   } catch (err) {
-    throw new Error('Token inválido o expirado');
+    throw new UnauthorizedError('Token inválido o expirado');
   }
 };

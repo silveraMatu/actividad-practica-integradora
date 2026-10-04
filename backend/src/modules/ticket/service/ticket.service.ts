@@ -1,4 +1,4 @@
-import { NotFoundError } from "../../../core/errors/appError.js";
+import { NotFoundError } from "../../../common/errors/appError.js";
 import { IUserRepository } from "../../user/repository/user.repository.types.js";
 import type {
   ITicketRepository,

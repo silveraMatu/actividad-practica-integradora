@@ -1,4 +1,4 @@
-import { db } from "./core/database/index.js";
+import { db } from "./common/database/index.js";
 import { app } from "./app.js";
 const port = process.env.PORT || 3000;
 

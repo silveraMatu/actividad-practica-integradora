@@ -10,7 +10,7 @@ export interface IUserCreate {
   rol: Types.ObjectId;
 }
 
-export interface IUserWithRol extends Omit<userResponseDTO, "rol"> {
+export interface IUserWithRol extends Omit<iUser, "rol"> {
   rol: Pick<IRole, "name">;
 }
 

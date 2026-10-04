@@ -1,7 +1,7 @@
 import "dotenv/config"
 import express , {Request, Response} from "express"
 import { router } from "./modules/routes.js";
-import { errorHandler } from "./core/middlewares/errorHandler.js";
+import { errorHandler } from "./common/middlewares/errorHandler.js";
 
 export const app = express();
 
