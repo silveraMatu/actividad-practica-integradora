@@ -28,12 +28,18 @@ export class SubscriptionService implements ISubscriptionService {
     if (subscriptionExists)
       throw new ConflictError("Ya estás suscrito a este ticket")
 
-    const newSubscription = await this.subscriptionRepo.create({
-      userId: userId,
-      ticketId: ticket._id.toString(),
-    })
+    try {
+      const newSubscription = await this.subscriptionRepo.create({
+        userId: userId,
+        ticketId: ticket._id.toString(),
+      })
 
-    return newSubscription
+      return newSubscription
+    } catch (err: any) {
+      if (err?.code === 11000)
+        throw new ConflictError("Ya estás suscrito a este ticket")
+      throw err
+    }
   }
 
   async deleteSubscription(userId: string, subscriptionId: string): Promise<void> {

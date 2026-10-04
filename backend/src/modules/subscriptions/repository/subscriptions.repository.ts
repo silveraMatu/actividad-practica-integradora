@@ -13,6 +13,10 @@ export class SubscriptionRepository implements ISubscriptionRepository {
     await Subscription.findByIdAndDelete(subscriptionId).exec();
   }
 
+  async deleteAllByTicket(ticketId: string): Promise<void> {
+    await Subscription.deleteMany({ ticketId }).exec();
+  }
+
   async findAllSubscriptionsByUser(userId: string): Promise<ISubscription[]> {
     return await Subscription
       .find({ userId })
@@ -21,8 +25,10 @@ export class SubscriptionRepository implements ISubscriptionRepository {
   }
 
   async findAllSubscriptionsByTicket(ticketId: string): Promise<ISubscription[]> {
-    return await Subscription.find({ ticketId }).exec();
-    //se pule despues
+    return await Subscription
+      .find({ ticketId })
+      .populate("userId")
+      .exec();
   }
 
   async findOne(userId: string, ticketId: string): Promise<ISubscription | null> {

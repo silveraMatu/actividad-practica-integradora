@@ -1,5 +1,6 @@
 import { NotFoundError } from "../../../common/errors/appError.js";
 import { IUserRepository } from "../../user/repository/user.repository.types.js";
+import { ISubscriptionRepository } from "../../subscriptions/repository/subscriptions.repository.types.js";
 import type {
   ITicketRepository,
   CreateTicketDTO,
@@ -14,7 +15,8 @@ export class TicketService implements IticketService {
   //inyectamos dependencia por constructor
   constructor(
     private readonly ticketRepo: ITicketRepository,
-    private readonly userRepo: IUserRepository)
+    private readonly userRepo: IUserRepository,
+    private readonly subscriptionRepo: ISubscriptionRepository)
   { }
 
   async createTicket(data: CreateTicketDTO): Promise<Iticket> {
@@ -67,6 +69,9 @@ export class TicketService implements IticketService {
     if (!deleted) {
       throw new Error("Error al eliminar el ticket");
     }
+
+    //limpieza en cascada de suscripciones huerfanas
+    await this.subscriptionRepo.deleteAllByTicket(id);
 
     return deleted;
   }

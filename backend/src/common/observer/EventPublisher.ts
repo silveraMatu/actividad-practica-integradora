@@ -20,8 +20,13 @@ export class EventPublisher implements ISubject{
   }
 
   async notify(event: TicketStatusChangedEvent): Promise<void> {
-    for (const observer of this.observers) {
-      await observer.update(event)
+    const results = await Promise.allSettled(
+      this.observers.map((observer) => observer.update(event))
+    )
+
+    for (const result of results) {
+      if (result.status === "rejected")
+        console.error("Error al notificar a un observer:", result.reason)
     }
   }
 }

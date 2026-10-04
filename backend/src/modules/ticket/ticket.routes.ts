@@ -5,6 +5,7 @@ import { TicketController } from "./ticket.controller.js";
 import { changeTicketStatusValidation, createTicketValidations, deleteTicketValidation } from "./ticket.validations.js";
 import { validate } from "../../common/middlewares/validate.js";
 import { UserRepository } from "../user/repository/user.repository.js";
+import { SubscriptionRepository } from "../subscriptions/repository/subscriptions.repository.js";
 import { authMiddleware as auth } from "../../common/middlewares/auth.middleware.js";
 import { requireRole as role } from "../../common/middlewares/role.middleware.js";
 
@@ -12,7 +13,8 @@ export const ticketRouter = Router();
 
 const ticketRepo = new TicketRepository();
 const userRepo = new UserRepository();
-const ticketService = new TicketService(ticketRepo, userRepo);
+const subscriptionRepo = new SubscriptionRepository();
+const ticketService = new TicketService(ticketRepo, userRepo, subscriptionRepo);
 const ticketController = new TicketController(ticketService);
 
 
