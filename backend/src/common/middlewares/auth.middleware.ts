@@ -5,7 +5,7 @@ import { authUserPayload } from "../types/express.js";
 
 export const authMiddleware = (req: Request, _res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies('token')
+    const token = req.cookies['token']
     if (!token) {
       throw new UnauthorizedError("No se encuentra autenticado")
     }

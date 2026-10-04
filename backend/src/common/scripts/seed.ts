@@ -4,7 +4,7 @@ import { RoleRepository } from "../../modules/roles/role.repository.js";
 import { db } from "../database/index.js";
 
 //insert roles
-const defaultRoles = ["admin", "operador", "usuario"]
+const defaultRoles = ["admin", "operator", "user"]
 
 const roleRepo = new RoleRepository()
 

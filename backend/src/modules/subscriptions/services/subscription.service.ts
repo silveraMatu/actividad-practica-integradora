@@ -7,7 +7,7 @@ import { CreateSubscriptionDTO } from "../dto/subscription.dto.js";
 import { NotFoundError } from "../../../common/errors/appError.js";
 
 
-export class SubscriptionServic implements ISubscriptionService { 
+export class SubscriptionService implements ISubscriptionService { 
   constructor(
     private readonly subscriptionRepo: ISubscriptionRepository,
     private readonly userRepo: IUserRepository,
@@ -16,17 +16,14 @@ export class SubscriptionServic implements ISubscriptionService {
   { }
 
   async createSubscription(subscription: CreateSubscriptionDTO): Promise<ISubscription> {
+    const { userId, ticketId }: CreateSubscriptionDTO = subscription
     
-    const user = await this.userRepo.findById(subscription.userId.toString());
-    if (!user)
-      throw new NotFoundError("Usuario no encontrado")
-
-    const ticket = await this.ticketRepo.findById(subscription.ticketId.toString());
+    const ticket = await this.ticketRepo.findById(ticketId.toString());
     if (!ticket)
       throw new NotFoundError("Ticket no encontrado")
 
     const newSubscription = await this.subscriptionRepo.create({
-      userId: user._id.toString(),
+      userId: userId,
       ticketId: ticket._id.toString(),
     })
 

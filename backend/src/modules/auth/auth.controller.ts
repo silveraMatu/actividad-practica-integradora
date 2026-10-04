@@ -29,6 +29,7 @@ export class AuthController {
       res.status(200).json({
         status: "OK",
         message: "Inicio de sesión exitoso",
+        user
       });
     } catch (err) {
       next(err);

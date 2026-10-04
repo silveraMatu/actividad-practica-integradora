@@ -10,7 +10,7 @@ export interface createRolesDTO {
 
 export class RoleRepository implements IRoleRepository {
   async getDefault(): Promise<IRole | null> {
-    return await Role.findOne({ name: "usuario" }).exec();
+    return await Role.findOne({ name: "user" }).exec();
   }
   async getByName(name: string): Promise<IRole | null> {
     return await Role.findOne({ name }).exec();
