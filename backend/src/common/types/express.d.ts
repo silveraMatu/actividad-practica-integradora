@@ -2,7 +2,7 @@ import { Request } from "express"
 
 export interface authUserPayload {
   userId: string
-  role: string
+  rol: string
 }
 
 declare global {

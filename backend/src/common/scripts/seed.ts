@@ -1,7 +1,9 @@
 import "dotenv/config"
 
 import { RoleRepository } from "../../modules/roles/role.repository.js";
+import { UserRepository } from "../../modules/user/repository/user.repository.js";
 import { db } from "../database/index.js";
+import { bcryptService } from "../security/hasher/bcrypt.js";
 
 //insert roles
 const defaultRoles = ["admin", "operator", "user"]
@@ -26,6 +28,42 @@ async function seedRoles(): Promise<void> {
 }
 
 
+//crear usuarios con distintos roles
+
+const users = [
+  { name: "admin", email: "admin@example.com", password: "admin123", rol: "admin" },
+  { name: "operator", email: "operator@example.com", password: "operator123", rol: "operator" },
+  { name: "user", email: "user@example.com", password: "user123", rol: "user" },
+]
+
+async function seedUsers(): Promise<void> {
+  const userRepo = new UserRepository()
+  const hasher = new bcryptService()
+  
+  for (const user of users) {
+    //validar que el user exista
+    const exist = await userRepo.findByEmail(user.email)
+    if (exist) {
+      console.log(`El usuario ${exist.name} ya existe`)
+      continue
+    }
+
+    const hashedPassword = await hasher.hash(user.password)
+    user.password = hashedPassword
+
+    const role = await roleRepo.getByName(user.rol)
+    if (!role) {
+      console.log(`El rol ${user.rol} no existe`)
+      continue
+    }
+
+    user.rol = role._id.toString()
+
+    await userRepo.create({ ...user })
+    console.log(`Usuario creado: ${user.name}`)
+  }
+}
+
 async function seedDB() {
   try {
     await db.connect(
@@ -36,6 +74,7 @@ async function seedDB() {
     )
     //seeds para poblar la db
     await seedRoles()
+    await seedUsers()
     
   } catch (err: any) {
     console.log("Error ejecutando el seed", err)

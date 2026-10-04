@@ -4,11 +4,11 @@ import { Request, Response, NextFunction } from 'express'
 
 export const requireRole = (...allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user?.role ) {
+    if (!req.user?.rol ) {
       return next(new UnauthorizedError('No autenticado o sin rol definido'))
     }
-    const { role } = req.user!
-    if (!allowedRoles.includes(role)) {
+    const { rol } = req.user!
+    if (!allowedRoles.includes(rol)) {
       return next(new UnauthorizedError('No tienes permisos para acceder a este recurso'))
     }
     next()

@@ -8,7 +8,8 @@ export class TicketController {
 
   create = async (req: Request, res: Response, next: NextFunction,): Promise<void> => {
     try {
-      const newTicket = await this.ticketService.createTicket(req.body);
+      const { userId } = req.user!;
+      const newTicket = await this.ticketService.createTicket({ ...req.body, ownerId: userId });
 
       //respomdemos con http de recurso creado
       res.status(201).json({

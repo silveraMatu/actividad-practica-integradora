@@ -9,13 +9,7 @@ export const createTicketValidations = [
   body("description")
     .notEmpty()
     .withMessage("La descripcion es requerida")
-    .bail(),
-  body("ownerId")
-    .notEmpty()
-    .withMessage("El userId es requerido")
-    .isMongoId()
-    .withMessage("El userId debe ser un ObjectId válido")
-    .bail(),
+    .bail()
 ]
 
 export const changeTicketStatusValidation = [

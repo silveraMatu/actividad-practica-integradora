@@ -35,7 +35,7 @@ export class AuthService implements IAuthService {
       name,
       email,
       password: passwordHash,
-      rol: defaultRoleId,
+      rol: defaultRoleId.toString(),
     });
 
     const publicUser: userResponseDTO = {
@@ -55,7 +55,7 @@ export class AuthService implements IAuthService {
 
     const passwordCorrect = await this.hasher.compare(data.password, user.password);
 
-    if (!passwordCorrect) throw new Error("Credenciales inválidas");
+    if (!passwordCorrect) throw new UnauthorizedError("Credenciales inválidas");
 
     const rol = user.rol.name;
 

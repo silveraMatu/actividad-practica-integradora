@@ -1,9 +1,10 @@
-import { IUserCreate, IUserWithRol } from "../repository/user.repository.types.js";
+import { createUserDTO } from "../dto/user.dto.js";
+import {  IUserWithRol } from "../repository/user.repository.types.js";
 import { iUser, User } from "../user.model.js";
 import { IUserRepository } from "./user.repository.types.js";
 
 export class UserRepository implements IUserRepository{
-  async create(data: IUserCreate): Promise<iUser> {
+  async create(data: createUserDTO): Promise<iUser> {
     const user = new User(data);
     await user.save();
     return user;

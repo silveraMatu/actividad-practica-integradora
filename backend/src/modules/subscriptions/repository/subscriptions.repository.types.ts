@@ -6,4 +6,5 @@ export interface ISubscriptionRepository {
   delete(subscriptionId: string): Promise<void>;
   findAllSubscriptionsByTicket(ticketId: string): Promise<ISubscription[]>;
   findAllSubscriptionsByUser(userId: string): Promise<ISubscription[]>;
+  findOne(userId: string, ticketId: string): Promise<ISubscription | null>;
 }

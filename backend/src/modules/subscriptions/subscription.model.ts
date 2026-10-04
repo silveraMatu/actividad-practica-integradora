@@ -8,14 +8,17 @@ export interface ISubscription extends Document {
 const SubcriptionSchema: Schema = new Schema({
   userId: {
     type: Types.ObjectId,
+    ref:"User",
     required: true,
-    index: true,
   },
   ticketId: {
     type: Types.ObjectId,
-    required: true,
-    index: true,
+    ref: "Ticket",
+    required: true
   },
 })
+
+//indice unico
+SubcriptionSchema.index({ userId: 1, ticketId: 1 }, { unique: true })
 
 export const Subscription = model<ISubscription>("Subscription", SubcriptionSchema);

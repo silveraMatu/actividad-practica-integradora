@@ -4,7 +4,7 @@ import { IUserRepository } from "../../user/repository/user.repository.types.js"
 import { ITicketRepository } from "../../ticket/repository/ticket.repository.types.js";
 import { ISubscription } from "../subscription.model.js";
 import { CreateSubscriptionDTO } from "../dto/subscription.dto.js";
-import { NotFoundError } from "../../../common/errors/appError.js";
+import { ConflictError, NotFoundError } from "../../../common/errors/appError.js";
 
 
 export class SubscriptionService implements ISubscriptionService { 
@@ -21,6 +21,10 @@ export class SubscriptionService implements ISubscriptionService {
     const ticket = await this.ticketRepo.findById(ticketId.toString());
     if (!ticket)
       throw new NotFoundError("Ticket no encontrado")
+
+    const subscriptionExists = await this.subscriptionRepo.findOne(userId, ticketId);
+    if (subscriptionExists)
+      throw new ConflictError("Ya estás suscrito a este ticket")
 
     const newSubscription = await this.subscriptionRepo.create({
       userId: userId,
