@@ -1,8 +1,9 @@
+import { CreateSubscriptionDTO } from "../dto/subscription.dto.js";
 import { ISubscription } from "../subscription.model.js";
 
-export interface ISubscriptionsRepository {
-  create(subscription: ISubscription): Promise<ISubscription>;
+export interface ISubscriptionRepository {
+  create(subscription: CreateSubscriptionDTO): Promise<ISubscription>;
   delete(subscriptionId: string): Promise<void>;
-  findAllSubscriptionsByTask(taskId: string): Promise<ISubscription[]>;
+  findAllSubscriptionsByTicket(ticketId: string): Promise<ISubscription[]>;
   findAllSubscriptionsByUser(userId: string): Promise<ISubscription[]>;
 }

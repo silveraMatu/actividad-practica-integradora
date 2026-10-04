@@ -1,8 +1,9 @@
 import { ISubscription, Subscription } from "../subscription.model.js";
-import { ISubscriptionsRepository } from "./subscriptions.repository.types.js";
+import { ISubscriptionRepository } from "./subscriptions.repository.types.js";
+import { CreateSubscriptionDTO } from "../dto/subscription.dto.js";
 
-export class SubscriptionsRepository implements ISubscriptionsRepository {
-  async create(subscription: ISubscription): Promise<ISubscription> {
+export class SubscriptionRepository implements ISubscriptionRepository {
+  async create(subscription: CreateSubscriptionDTO): Promise<ISubscription> {
     const newSubscription = new Subscription(subscription);
     await newSubscription.save();
     return newSubscription;
@@ -16,8 +17,8 @@ export class SubscriptionsRepository implements ISubscriptionsRepository {
     return await Subscription.find({ userId }).exec();
   }
 
-  async findAllSubscriptionsByTask(taskId: string): Promise<ISubscription[]> {
-    return await Subscription.find({ ticketId: taskId }).exec();
+  async findAllSubscriptionsByTicket(ticketId: string): Promise<ISubscription[]> {
+    return await Subscription.find({ ticketId }).exec();
   }
   
 }
