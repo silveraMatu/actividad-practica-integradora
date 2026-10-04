@@ -4,9 +4,9 @@ export interface INotification extends Document {
   userId: Types.ObjectId;
   ticketId: Types.ObjectId;
   message: string;
-  read: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  read?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const NotificationSchema = new Schema<INotification>(
