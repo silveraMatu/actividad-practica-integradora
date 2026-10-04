@@ -30,7 +30,7 @@ export class TicketService implements IticketService {
 
   async getAllTickets(): Promise<Iticket[]> {
     const tickets = await this.ticketRepo.findAll();
-    if (!tickets) {
+    if (!tickets.length) {
       throw new NotFoundError("No se encontraron tickets");
     }
     return tickets;

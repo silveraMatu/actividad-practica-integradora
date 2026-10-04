@@ -45,7 +45,7 @@ export class SubscriptionService implements ISubscriptionService {
 
   async findSubscriptionsByUser(userId: string): Promise<ISubscription[]> {
     const subscriptions = await this.subscriptionRepo.findAllSubscriptionsByUser(userId);
-    if (!subscriptions)
+    if (!subscriptions.length)
       throw new NotFoundError("No se encontraron suscripciones")
     
     return subscriptions
@@ -53,7 +53,7 @@ export class SubscriptionService implements ISubscriptionService {
 
   async findSubscriptionsByTicket(ticketId: string): Promise<ISubscription[]> {
     const subscriptions = await this.subscriptionRepo.findAllSubscriptionsByTicket(ticketId);
-    if (!subscriptions)
+    if (!subscriptions.length)
       throw new NotFoundError("No se encontraron suscripciones")
     
     return subscriptions
