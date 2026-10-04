@@ -30,13 +30,14 @@ export class SubscriptionController{
 
   delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const { userId }: Pick<authUserPayload, "userId"> = req.user!
       const subscriptionId = req.params.subscriptionId!.toString()
 
-      await this.subscriptionService.deleteSubscription(subscriptionId)
+      await this.subscriptionService.deleteSubscription(userId, subscriptionId)
       res.status(200).json({
         status: "OK",
         statusCode: 200,
-        message: "Te has desuscripto del ticket exitosamente"
+        message: "Te has desuscripto del ticket"
       })
       
     } catch (err) {

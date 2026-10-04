@@ -28,4 +28,9 @@ export class SubscriptionRepository implements ISubscriptionRepository {
   async findOne(userId: string, ticketId: string): Promise<ISubscription | null> {
     return await Subscription.findOne({ userId, ticketId }).exec();
   }
+
+  async findOneById(subscriptionId: string): Promise<ISubscription | null> {
+    return await Subscription.findById(subscriptionId).exec();
+  }
+  
 }

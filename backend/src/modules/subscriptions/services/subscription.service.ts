@@ -4,8 +4,7 @@ import { IUserRepository } from "../../user/repository/user.repository.types.js"
 import { ITicketRepository } from "../../ticket/repository/ticket.repository.types.js";
 import { ISubscription } from "../subscription.model.js";
 import { CreateSubscriptionDTO } from "../dto/subscription.dto.js";
-import { ConflictError, NotFoundError } from "../../../common/errors/appError.js";
-
+import { ConflictError, ForbiddenError, NotFoundError } from "../../../common/errors/appError.js";
 
 export class SubscriptionService implements ISubscriptionService { 
   constructor(
@@ -39,7 +38,20 @@ export class SubscriptionService implements ISubscriptionService {
     return newSubscription
   }
 
-  async deleteSubscription(subscriptionId: string): Promise<void> {
+  async deleteSubscription(userId: string, subscriptionId: string): Promise<void> {
+    const subscription = await this.subscriptionRepo.findOneById(subscriptionId);
+    if (!subscription)
+      throw new NotFoundError("Suscripción no encontrada")
+
+    if (!subscription.userId.equals(userId))
+      throw new ForbiddenError("No tienes permiso para eliminar esta suscripción")
+
+    const { ticketId } = subscription
+    
+    const subscriptionExists = await this.subscriptionRepo.findOne(userId, ticketId.toString())
+    if (!subscriptionExists)
+      throw new NotFoundError("No estás suscrito a este ticket")
+    
     await this.subscriptionRepo.delete(subscriptionId);
   }
 

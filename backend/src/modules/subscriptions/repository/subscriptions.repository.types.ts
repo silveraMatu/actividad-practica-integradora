@@ -7,4 +7,5 @@ export interface ISubscriptionRepository {
   findAllSubscriptionsByTicket(ticketId: string): Promise<ISubscription[]>;
   findAllSubscriptionsByUser(userId: string): Promise<ISubscription[]>;
   findOne(userId: string, ticketId: string): Promise<ISubscription | null>;
+  findOneById(subscriptionId: string): Promise<ISubscription | null>;
 }
