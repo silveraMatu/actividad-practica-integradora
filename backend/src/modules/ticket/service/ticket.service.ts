@@ -18,14 +18,14 @@ export class TicketService implements IticketService {
   { }
 
   async createTicket(data: CreateTicketDTO): Promise<Iticket> {
-    const { title, description, userId }: CreateTicketDTO = data;
-    const userExist = await this.userRepo.findById(userId)
+    const { title, description, ownerId }: CreateTicketDTO = data;
+    const userExist = await this.userRepo.findById(ownerId)
 
     if (!userExist) {
       throw new NotFoundError("No se encontro el usuario");
     }
     
-    return await this.ticketRepo.create({title, description, userId});
+    return await this.ticketRepo.create({title, description, ownerId});
   }
 
   async getAllTickets(): Promise<Iticket[]> {

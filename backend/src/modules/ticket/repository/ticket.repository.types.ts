@@ -6,7 +6,7 @@ import {
 export interface CreateTicketDTO {
   title: string;
   description: string;
-  userId: string;
+  ownerId: string;
 }
 
 export interface ITicketRepository {

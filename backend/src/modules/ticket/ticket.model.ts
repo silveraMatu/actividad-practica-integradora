@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import { Document, Schema, Types, model } from 'mongoose'
 
 //Aca estamos definiendo los estados 
 //Estados : | A. Mesa de ayuda | Ticket | `ABIERTO`, `EN_PROGRESO`, `RESUELTO`, `CERRADO` |
@@ -13,25 +13,30 @@ export interface Iticket extends Document { //El document viene de mongoose hace
     title: string,
     description: string,
     status: TicketStatus,
-    userId: string
+    ownerId: Types.ObjectId,
 }
 
 const TicketSchema: Schema = new Schema(
     {
-        title: { type: String, required: true },
-        description: { type: String, required: true },
+        title: { type: String, required: true, trim: true },
+        description: { type: String, required: true, trim: true },
         status: {
             type: String,
             enum: Object.values(TicketStatus),
             default: TicketStatus.ABIERTO
         },
-        userId: { type: String, required: true }
+        ownerId: {
+            type: Types.ObjectId,
+            ref: 'User',
+            required: true,
+            index: true
+        }
     },
     {
         timestamps: true   //crea los campos createAt y updateAt 
     }
 );
 
-export const Ticket = mongoose.model<Iticket>( 'Ticket', TicketSchema )
+export const Ticket = model<Iticket>( 'Ticket', TicketSchema )
 
 
