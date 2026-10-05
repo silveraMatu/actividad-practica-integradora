@@ -85,7 +85,6 @@ export class TicketService implements IticketService {
       throw new AppError("Error al eliminar el ticket", 500);
     }
 
-    //limpieza en cascada de suscripciones huerfanas
     await this.subscriptionRepo.deleteAllByTicket(id);
 
     return deleted;

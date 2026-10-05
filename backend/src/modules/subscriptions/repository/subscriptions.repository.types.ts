@@ -1,8 +1,6 @@
 import { CreateSubscriptionDTO } from "../dto/subscription.dto.js";
 import { ISubscription } from "../subscription.model.js";
 
-//vista de un suscriptor: no reutiliza "userId" para evitar que el mismo campo
-//signifique "ObjectId crudo" en un metodo y "documento de usuario" en otro
 export interface ISubscriberView {
   _id: string;
   ticketId: string;

@@ -1,5 +1,4 @@
-import "dotenv/config"
-
+import "../config/env.js";
 import { RoleRepository } from "../../modules/roles/role.repository.js";
 import { UserRepository } from "../../modules/user/repository/user.repository.js";
 import { db } from "../database/index.js";

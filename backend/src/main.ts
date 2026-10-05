@@ -1,4 +1,4 @@
-import "dotenv/config"
+import "./common/config/env.js";
 import { db } from "./common/database/index.js";
 import { createApp } from "./app.js";
 import { createRouter } from "./modules/routes.js";
@@ -37,7 +37,6 @@ async function main() {
     dbName: process.env.MONGO_DB_NAME!,
   });
 
-  //repositorios
   const userRepo = new UserRepository();
   const roleRepo = new RoleRepository();
   const ticketRepo = new TicketRepository();
@@ -45,27 +44,22 @@ async function main() {
   const notificationRepo = new NotificationRepository();
   const hasher = new bcryptService();
 
-  //observer: subject
   const eventPublisher = new EventPublisher();
 
-  //servicios
   const authService = new AuthService(userRepo, roleRepo, hasher);
   const userService = new UserService(userRepo, roleRepo);
   const ticketService = new TicketService(ticketRepo, userRepo, subscriptionRepo, eventPublisher);
   const subscriptionService = new SubscriptionService(subscriptionRepo, ticketRepo);
   const notificationService = new NotificationService(subscriptionRepo, notificationRepo);
 
-  //observer: registro del observer
   eventPublisher.attach(notificationService);
 
-  //controllers
   const authController = new AuthController(authService);
   const userController = new UserController(userService);
   const ticketController = new TicketController(ticketService);
   const subscriptionController = new SubscriptionController(subscriptionService);
   const notificationController = new NotificationController(notificationService);
 
-  //routers
   const apiRouter = createRouter({
     authRouter: createAuthRouter(authController),
     userRouter: createUserRouter(userController),
