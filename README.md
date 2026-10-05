@@ -5,9 +5,8 @@
 **Organización del backend:** Carpeta por módulo
 
 ## Integrantes
-- [Apellido, Nombre — usuario de GitHub]
-- [Apellido, Nombre — usuario de GitHub]
-- [Apellido, Nombre — usuario de GitHub]
+- Silvera, Matías — silveraMatu
+- Ayala, Lautaro — Lauttd
 
 ## Descripción
 Sistema de mesa de ayuda donde los usuarios crean tickets que pasan por distintos estados (`ABIERTO`, `EN_PROGRESO`, `RESUELTO`, `CERRADO`). Cualquier usuario puede suscribirse a un ticket y recibe una notificación (in-app y por consola del backend) cada vez que su estado cambia, implementado con los patrones Singleton, Observer, Factory y Adapter.
