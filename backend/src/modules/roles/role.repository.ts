@@ -2,6 +2,7 @@ import { Role, type IRole } from "./role.model.js";
 
 export interface IRoleRepository {
   getDefault(): Promise<IRole | null>;
+  findById(id: string): Promise<IRole | null>;
 }
 
 export interface createRolesDTO {
@@ -11,6 +12,9 @@ export interface createRolesDTO {
 export class RoleRepository implements IRoleRepository {
   async getDefault(): Promise<IRole | null> {
     return await Role.findOne({ name: "user" }).exec();
+  }
+  async findById(id: string): Promise<IRole | null> {
+    return await Role.findById(id).exec();
   }
   async getByName(name: string): Promise<IRole | null> {
     return await Role.findOne({ name }).exec();

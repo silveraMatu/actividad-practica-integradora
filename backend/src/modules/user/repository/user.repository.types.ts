@@ -20,4 +20,6 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<iUser | null>;
   findByEmailWIthRol(email: string): Promise<IUserWithRol | null>;
   findById(id: string): Promise<iUser | null>;
+  findAll(): Promise<IUserWithRol[]>;
+  assignRole(userId: string, roleId: string): Promise<IUserWithRol | null>;
 }

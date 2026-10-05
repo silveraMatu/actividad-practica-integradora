@@ -29,4 +29,22 @@ export class UserRepository implements IUserRepository{
     const user = await User.findById(id).exec()
     return user ?? null
   }
+
+  async assignRole(userId: string, roleId: string): Promise<IUserWithRol | null> {
+    const user = await User
+      .findByIdAndUpdate(userId, { rol: roleId }, { returnDocument: "after" })
+      .populate("rol", "name")
+      .lean<IUserWithRol>()
+      .exec()
+    return user ?? null
+  }
+
+  async findAll(): Promise<IUserWithRol[]> {
+    const users = await User
+      .find()
+      .populate("rol", "name")
+      .lean<IUserWithRol[]>()
+      .exec()
+    return users
+  }
 }
