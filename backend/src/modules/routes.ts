@@ -6,6 +6,7 @@ export interface ApiRouters {
   ticketRouter: Router;
   subscriptionRouter: Router;
   notificationRouter: Router;
+  roleRouter: Router;
 }
 
 export function createRouter(routers: ApiRouters): Router {
@@ -17,6 +18,7 @@ export function createRouter(routers: ApiRouters): Router {
   router.use('/ticket', routers.ticketRouter)
   router.use('/subscription', routers.subscriptionRouter)
   router.use('/notifications', routers.notificationRouter)
+  router.use('/roles', routers.roleRouter)
 
   return router
 }

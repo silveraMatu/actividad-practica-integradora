@@ -11,6 +11,7 @@ import { RoleRepository } from "./modules/roles/role.repository.js";
 import { TicketRepository } from "./modules/ticket/repository/ticket.repository.js";
 import { SubscriptionRepository } from "./modules/subscriptions/repository/subscriptions.repository.js";
 import { NotificationRepository } from "./modules/notifications/repository/notification.repository.js";
+import { RoleService } from "./modules/roles/services/role.services.js";
 
 import { AuthService } from "./modules/auth/services/auth.service.js";
 import { UserService } from "./modules/user/services/user.services.js";
@@ -23,12 +24,14 @@ import { UserController } from "./modules/user/user.controller.js";
 import { TicketController } from "./modules/ticket/ticket.controller.js";
 import { SubscriptionController } from "./modules/subscriptions/subscription.controller.js";
 import { NotificationController } from "./modules/notifications/notification.controller.js";
+import { RoleController } from "./modules/roles/role.controller.js";
 
 import { createAuthRouter } from "./modules/auth/auth.routes.js";
 import { createUserRouter } from "./modules/user/user.routes.js";
 import { createTicketRouter } from "./modules/ticket/ticket.routes.js";
 import { createSubscriptionRouter } from "./modules/subscriptions/subscription.routes.js";
 import { createNotificationRouter } from "./modules/notifications/notification.routes.js";
+import { createRoleRouter } from "./modules/roles/role.routes.js";
 
 const port = process.env.PORT || 3000;
 
@@ -51,6 +54,7 @@ async function main() {
   const ticketService = new TicketService(ticketRepo, userRepo, subscriptionRepo, eventPublisher);
   const subscriptionService = new SubscriptionService(subscriptionRepo, ticketRepo);
   const notificationService = new NotificationService(subscriptionRepo, notificationRepo);
+  const roleService = new RoleService(roleRepo);
 
   eventPublisher.attach(notificationService);
 
@@ -59,6 +63,7 @@ async function main() {
   const ticketController = new TicketController(ticketService);
   const subscriptionController = new SubscriptionController(subscriptionService);
   const notificationController = new NotificationController(notificationService);
+  const roleController = new RoleController(roleService);
 
   const apiRouter = createRouter({
     authRouter: createAuthRouter(authController),
@@ -66,6 +71,7 @@ async function main() {
     ticketRouter: createTicketRouter(ticketController),
     subscriptionRouter: createSubscriptionRouter(subscriptionController),
     notificationRouter: createNotificationRouter(notificationController),
+    roleRouter: createRoleRouter(roleController),
   });
 
   const app = createApp(apiRouter);
