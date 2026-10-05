@@ -18,9 +18,9 @@ Sistema de mesa de ayuda donde los usuarios crean tickets que pasan por distinto
 
 ## Estado actual del proyecto
 
-> El frontend todavía no está desarrollado. Esta sección se va a actualizar cuando esté listo, incluyendo el flujo completo con `docker compose up --build` levantando backend + frontend + base de datos. Por ahora, Docker Compose solo levanta la base de datos; el backend se corre localmente.
+> Backend y frontend están desarrollados y funcionales. Por ahora, Docker Compose solo levanta la base de datos; backend y frontend se corren localmente con `npm run dev` cada uno (dockerizar ambos queda como mejora "valorada" a futuro).
 
-## Cómo ejecutar el proyecto (estado actual)
+## Cómo ejecutar el proyecto
 
 1. Clonar el repositorio:
    ```bash
@@ -43,13 +43,21 @@ Sistema de mesa de ayuda donde los usuarios crean tickets que pasan por distinto
    npm run dev
    ```
 5. La API queda disponible en `http://localhost:3000/api`.
+6. En otra terminal, levantar el frontend (proyecto independiente, con su propio `package.json`):
+   ```bash
+   cd frontend
+   cp .env.example .env
+   npm install
+   npm run dev
+   ```
+7. La aplicación queda disponible en `http://localhost:5173`.
 
 ## Ejecución sin Docker (opcional)
 Si ya tenés una instancia de MongoDB corriendo localmente, podés saltar el paso 3 y ajustar `MONGO_URI` en el `.env` de la raíz para que apunte a esa instancia. Los pasos 4 y 5 son los mismos.
 
 ## Variables de entorno
 
-El archivo `.env` vive en la **raíz del repositorio** (no dentro de `backend/`) — tanto `docker-compose.yml` como el backend lo leen desde ahí.
+El archivo `.env` de la **raíz del repositorio** (no dentro de `backend/`) es leído tanto por `docker-compose.yml` como por el backend.
 
 | Variable | Descripción | Ejemplo |
 |---|---|---|
@@ -60,6 +68,12 @@ El archivo `.env` vive en la **raíz del repositorio** (no dentro de `backend/`)
 | `SECRET` | Clave para firmar los JWT | `cambiar-este-secreto-en-produccion` |
 | `SALT` | Rondas de hashing de bcrypt | `10` |
 | `PORT` | Puerto del backend | `3000` |
+
+El frontend es un proyecto separado y tiene su **propio** `.env` en `frontend/.env` (ver `frontend/.env.example`):
+
+| Variable | Descripción | Ejemplo |
+|---|---|---|
+| `VITE_API_URL` | URL base de la API consumida por el frontend | `http://localhost:3000/api` |
 
 ## Usuarios de prueba
 
@@ -72,10 +86,18 @@ Creados automáticamente por `npm run seed`:
 | user | user@example.com | user123 |
 
 ## Cómo probar el flujo de notificaciones
+
+**Desde el frontend** (`http://localhost:5173`):
+1. Iniciar sesión como `user` en una ventana, entrar al detalle de un ticket que no sea propio y hacer clic en "Suscribirme".
+2. En otra ventana (o una de incógnito), iniciar sesión como `operator` y cambiar el estado de ese mismo ticket desde su detalle.
+3. Volver a la sesión de `user` y abrir "Notificaciones" (o esperar a que suba el contador de la campanita, que hace polling cada 10s): ahí aparece la notificación del cambio de estado.
+4. Verificar la misma notificación en la terminal donde corre `npm run dev` del backend — el `ConsoleNotifierAdapter` imprime una línea `[NOTIFICATION] ...` en el momento del cambio de estado.
+
+**Vía API directamente** (equivalente, sin frontend):
 1. Ingresar como `user` (`POST /api/auth/login`) y suscribirse a un ticket existente (`POST /api/subscription/:ticketId`).
 2. Ingresar como `operator` y cambiar el estado de ese ticket (`PUT /api/ticket/change-status/:id`).
 3. Como `user`, consultar `GET /api/notifications`: la notificación del cambio de estado aparece ahí.
-4. Verificar la misma notificación en la terminal donde corre `npm run dev` — el `ConsoleNotifierAdapter` imprime una línea `[NOTIFICATION] ...` en el momento del cambio de estado.
+4. Verificar la misma notificación en la terminal donde corre `npm run dev` del backend.
 
 ## Endpoints principales
 
@@ -98,6 +120,13 @@ Creados automáticamente por `npm run seed`:
 | GET | `/api/notifications/unread` | admin, operator, user |
 | PATCH | `/api/notifications/:id/read` | admin, operator, user |
 | PATCH | `/api/notifications/read-all` | admin, operator, user |
+| GET | `/api/roles` | admin |
+
+## Frontend
+
+React + TypeScript + Vite, en `frontend/` como proyecto totalmente independiente del backend (propio `package.json`, `tsconfig.json`, `Dockerfile`). Sin frameworks de CSS ni Axios: estilos en un único CSS plano y HTTP con `fetch` nativo (`credentials: "include"`, ya que la sesión viaja en la cookie httpOnly que setea el backend, no en `localStorage`).
+
+Pantallas: login/registro, listado y detalle de tickets (con suscripción/desuscripción y, según el rol, cambio de estado o borrado), formulario de creación de ticket, bandeja de notificaciones con campanita de no leídas (polling cada 10s) y panel de administración de usuarios/roles. El ocultamiento de botones por rol (`Can`, `ProtectedRoute`) es solo un complemento de UX — la validación real de permisos la hace el backend en cada request.
 
 ## Patrones y principios SOLID
 Ver [PATTERNS.md](./PATTERNS.md).
