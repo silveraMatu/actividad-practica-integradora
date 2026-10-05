@@ -1,13 +1,22 @@
 import { Router } from "express";
-import { authRouter } from "./auth/auth.routes.js";
-import { ticketRouter } from "./ticket/ticket.routes.js";
-import { subscriptionRouter } from "./subscriptions/subscription.routes.js";
-import { notificationRouter } from "./notifications/notification.routes.js";
 
-export const router = Router()
+export interface ApiRouters {
+  authRouter: Router;
+  userRouter: Router;
+  ticketRouter: Router;
+  subscriptionRouter: Router;
+  notificationRouter: Router;
+}
 
-//aca se añadiran las rutas de cada modulo
-router.use('/auth', authRouter)
-router.use('/ticket', ticketRouter)
-router.use('/subscription', subscriptionRouter)
-router.use('/notifications', notificationRouter)
+export function createRouter(routers: ApiRouters): Router {
+  const router = Router()
+
+  //aca se añadiran las rutas de cada modulo
+  router.use('/auth', routers.authRouter)
+  router.use('/user', routers.userRouter)
+  router.use('/ticket', routers.ticketRouter)
+  router.use('/subscription', routers.subscriptionRouter)
+  router.use('/notifications', routers.notificationRouter)
+
+  return router
+}
