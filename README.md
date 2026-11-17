@@ -24,8 +24,8 @@ Sistema de mesa de ayuda donde los usuarios crean tickets que pasan por distinto
 
 1. Clonar el repositorio:
    ```bash
-   git clone [url]
-   cd [carpeta]
+   git clone https://github.com/silveraMatu/actividad-practica-integradora.git
+   cd actividad-practica-integradora
    ```
 2. Crear el archivo de variables de entorno (en la raíz del repositorio, no dentro de `backend/`):
    ```bash
